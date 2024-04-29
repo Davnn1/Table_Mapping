@@ -1,0 +1,87 @@
+kind: DeploymentConfig
+apiVersion: apps.openshift.io/v1
+metadata:
+  annotations:
+    app.openshift.io/route-disabled: 'false'
+    app.openshift.io/vcs-ref: UAT1
+    app.openshift.io/vcs-uri: >-
+      http://bcagitlab.intra.bca.co.id/cts-e/CASH/AbacasBackend/abacas-transaction-service
+    openshift.io/generated-by: OpenShiftWebConsole
+  name: abacas-transaction-service
+  labels:
+    app: abacas-transaction-service
+    app.kubernetes.io/component: abacas-transaction-service
+    app.kubernetes.io/instance: abacas-transaction-service
+    app.kubernetes.io/name: abacas-transaction-service
+    app.kubernetes.io/part-of: ABACAS
+    app.openshift.io/runtime: java
+    app.openshift.io/runtime-version: openjdk-11-el7
+spec:
+  strategy:
+    type: Rolling
+    rollingParams:
+      updatePeriodSeconds: 1
+      intervalSeconds: 1
+      timeoutSeconds: 600
+      maxUnavailable: 25%
+      maxSurge: 25%
+    resources: {}
+    activeDeadlineSeconds: 21600
+  triggers:
+    - type: ImageChange
+      imageChangeParams:
+        automatic: true
+        containerNames:
+          - abacas-transaction-service
+        from:
+          kind: ImageStreamTag
+          namespace: abacas-uat
+          name: 'abacas-transaction-service:latest'
+        lastTriggeredImage: >-
+          image-registry.openshift-image-registry.svc:5000/abacas-uat/abacas-transaction-service@sha256:2ebe6cd51cc6a93f9f88514ca81aa9cfc86e7a5bacdb77a1e2826bcc3d8409d8
+    - type: ConfigChange
+  replicas: 1
+  revisionHistoryLimit: 10
+  test: false
+  paused: true
+  selector:
+    app: abacas-transaction-service
+    deploymentconfig: abacas-transaction-service
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: abacas-transaction-service
+        deploymentconfig: abacas-transaction-service
+    spec:
+      containers:
+        - name: abacas-transaction-service
+          image: >-
+            image-registry.openshift-image-registry.svc:5000/abacas-uat/abacas-transaction-service:latest
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+            - containerPort: 8443
+              protocol: TCP
+            - containerPort: 8778
+              protocol: TCP
+          envFrom:
+            - configMapRef:
+                name: application.properties
+            - secretRef:
+                name: dbconfig
+          resources:
+            limits:
+              cpu: 1500m
+              memory: 3Gi
+            requests:
+              cpu: 500m
+              memory: 1Gi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          imagePullPolicy: Always
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      securityContext: {}
+      schedulerName: default-scheduler

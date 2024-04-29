@@ -1,0 +1,37 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: abacas-transaction-service
+  labels:
+    app: abacas-transaction-service
+    app.kubernetes.io/component: abacas-transaction-service
+    app.kubernetes.io/instance: abacas-transaction-service
+    app.kubernetes.io/name: abacas-transaction-service
+    app.kubernetes.io/part-of: ABACAS
+    app.openshift.io/runtime: java
+    app.openshift.io/runtime-version: openjdk-11-el7
+  annotations:
+    app.openshift.io/vcs-ref: DEV1
+    app.openshift.io/vcs-uri: >-
+      http://bcagitlab.intra.bca.co.id/cts-e/CASH/AbacasBackend/abacas-transaction-service
+    openshift.io/generated-by: OpenShiftWebConsole
+spec:
+  ports:
+    - name: 8080-tcp
+      protocol: TCP
+      port: 8080
+      targetPort: 8080
+    - name: 8443-tcp
+      protocol: TCP
+      port: 8443
+      targetPort: 8443
+    - name: 8778-tcp
+      protocol: TCP
+      port: 8778
+      targetPort: 8778
+  internalTrafficPolicy: Cluster
+  type: ClusterIP
+  sessionAffinity: None
+  selector:
+    app: abacas-transaction-service
+    deploymentconfig: abacas-transaction-service

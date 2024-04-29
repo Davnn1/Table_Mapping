@@ -1,0 +1,20 @@
+kind: ImageStream
+apiVersion: image.openshift.io/v1
+metadata:
+  annotations:
+    app.openshift.io/vcs-ref: master
+    app.openshift.io/vcs-uri: >-
+      http://bcagitlab.intra.bca.co.id/cts-e/CASH/AbacasBackend/abacas-transaction-service
+    openshift.io/generated-by: OpenShiftWebConsole
+  name: abacas-transaction-service
+  labels:
+    app: abacas-transaction-service
+    app.kubernetes.io/component: abacas-transaction-service
+    app.kubernetes.io/instance: abacas-transaction-service
+    app.kubernetes.io/name: abacas-transaction-service
+    app.kubernetes.io/part-of: ABACAS
+    app.openshift.io/runtime: java
+    app.openshift.io/runtime-version: openjdk-11-el7
+spec:
+  lookupPolicy:
+    local: false

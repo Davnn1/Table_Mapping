@@ -1,0 +1,11 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: application.properties
+data:
+  TZ: Asia/Jakarta
+  server.servlet.context-path: /transaction
+  spring.datasource.driver-class-oracle.jdbc.driver.OracleDriver: ''
+  spring.datasource.url: 'jdbc:oracle:thin:@olndbdev08o.dti.co.id:1525:dabac'
+  spring.devtools.add-properties: 'true'
+  springdoc.show-actuator: 'true'
